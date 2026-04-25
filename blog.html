@@ -450,10 +450,10 @@ nav{background:rgba(6,8,15,0.97);backdrop-filter:blur(20px);border-bottom:1px so
 
 <!-- PAGINATION -->
 <div class="pagination">
-  <button class="page-btn active">1</button>
-  <button class="page-btn">2</button>
-  <button class="page-btn">3</button>
-  <button class="page-btn">Suivant →</button>
+  <button class="page-btn active" onclick="goToPage(1)">1</button>
+  <button class="page-btn" onclick="goToPage(2)">2</button>
+  <button class="page-btn" onclick="goToPage(3)">3</button>
+  <button class="page-btn" onclick="goToPage(2)">Suivant →</button>
 </div>
 
 <!-- STICKY -->
@@ -466,6 +466,106 @@ nav{background:rgba(6,8,15,0.97);backdrop-filter:blur(20px);border-bottom:1px so
 </div>
 
 <script>
+// Articles data for pages 2 & 3
+var allPages = {
+  1: document.getElementById('articlesGrid') ? document.getElementById('articlesGrid').innerHTML : '',
+  2: `
+    <div class="article-card fade-up" data-cat="guide" data-title="iptv 4k ultra hd guide 2025">
+      <div class="art-thumb"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+      <div class="art-body">
+        <div class="art-cat">Guide</div>
+        <div class="art-title"><a href="article-connexion-internet.html">Quelle connexion internet pour IPTV 4K sans buffering ?</a></div>
+        <div class="art-desc">Débit minimum requis, fibre vs ADSL, WiFi vs Ethernet : tout pour un streaming parfait en 4K.</div>
+        <div class="art-meta"><span>⏱ 6 min</span><span>📅 Mar 2025</span><span>👁 1.9k vues</span></div>
+        <div class="art-tags"><span class="art-tag">4K</span><span class="art-tag">Internet</span><span class="art-tag">Fibre</span></div>
+      </div>
+    </div>
+    <div class="article-card fade-up" data-cat="materiel" data-title="android box iptv nvidia shield xiaomi mi box">
+      <div class="art-thumb"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="1.5" stroke-linecap="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg></div>
+      <div class="art-body">
+        <div class="art-cat">Matériel</div>
+        <div class="art-title"><a href="article-android-box.html">Meilleure Android Box pour IPTV en 2025 : notre sélection</a></div>
+        <div class="art-desc">Nvidia Shield, Xiaomi Mi Box, X96 Max+ : comparatif complet des meilleures box Android pour l'IPTV 4K.</div>
+        <div class="art-meta"><span>⏱ 9 min</span><span>📅 Jan 2025</span><span>👁 4.2k vues</span></div>
+        <div class="art-tags"><span class="art-tag">Android Box</span><span class="art-tag">4K</span><span class="art-tag">Nvidia Shield</span></div>
+      </div>
+    </div>
+    <div class="article-card fade-up" data-cat="astuce" data-title="freeze buffering iptv solution 2025">
+      <div class="art-thumb"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+      <div class="art-body">
+        <div class="art-cat">Astuce</div>
+        <div class="art-title"><a href="article-freeze-buffering.html">IPTV qui freeze ou buffe : 7 solutions efficaces en 2025</a></div>
+        <div class="art-desc">Votre IPTV se coupe ou buffe ? Voici les 7 solutions testées pour retrouver un streaming fluide.</div>
+        <div class="art-meta"><span>⏱ 5 min</span><span>📅 Mar 2025</span><span>👁 6.7k vues</span></div>
+        <div class="art-tags"><span class="art-tag">Freeze</span><span class="art-tag">Solution</span><span class="art-tag">Astuce</span></div>
+      </div>
+    </div>
+  `,
+  3: `
+    <div class="article-card fade-up" data-cat="comparatif" data-title="smarters pro tivimate application iptv">
+      <div class="art-thumb"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="6" width="20" height="12" rx="4"/><path d="M6 12h4M8 10v4"/></svg></div>
+      <div class="art-body">
+        <div class="art-cat">Comparatif</div>
+        <div class="art-title"><a href="article-smarters-tivimate.html">IPTV Smarters Pro vs TiviMate : lequel choisir en 2025 ?</a></div>
+        <div class="art-desc">Comparatif des deux meilleures applications IPTV : interface, fonctionnalités et configuration.</div>
+        <div class="art-meta"><span>⏱ 8 min</span><span>📅 Fév 2025</span><span>👁 3.5k vues</span></div>
+        <div class="art-tags"><span class="art-tag">Smarters</span><span class="art-tag">TiviMate</span><span class="art-tag">App</span></div>
+      </div>
+    </div>
+    <div class="article-card fade-up" data-cat="guide" data-title="ligue 1 champions league iptv sport direct">
+      <div class="art-thumb"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/><path d="M2 12h20"/></svg></div>
+      <div class="art-body">
+        <div class="art-cat">Guide</div>
+        <div class="art-title"><a href="article-sport-ligue1.html">Regarder Ligue 1 et Champions League en IPTV en direct 2025</a></div>
+        <div class="art-desc">Accédez à tous les matchs de foot en direct via IPTV : Ligue 1, Premier League, Champions League.</div>
+        <div class="art-meta"><span>⏱ 7 min</span><span>📅 Jan 2025</span><span>👁 8.2k vues</span></div>
+        <div class="art-tags"><span class="art-tag">Football</span><span class="art-tag">Sport</span><span class="art-tag">Direct</span></div>
+      </div>
+    </div>
+    <div class="article-card fade-up" data-cat="astuce" data-title="essai gratuit iptv 24h sans cb test">
+      <div class="art-thumb"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
+      <div class="art-body">
+        <div class="art-cat">Astuce</div>
+        <div class="art-title"><a href="article-essai-gratuit.html">Comment obtenir un essai gratuit IPTV 24h sans engagement</a></div>
+        <div class="art-desc">Testez l'IPTV gratuitement 24h sans carte bancaire. Guide pour obtenir votre essai FluxStream.</div>
+        <div class="art-meta"><span>⏱ 4 min</span><span>📅 Mar 2025</span><span>👁 5.1k vues</span></div>
+        <div class="art-tags"><span class="art-tag">Essai Gratuit</span><span class="art-tag">Sans CB</span></div>
+      </div>
+    </div>
+  `
+};
+
+var currentPage = 1;
+
+function goToPage(page) {
+  currentPage = page;
+  // Update grid
+  document.getElementById('articlesGrid').innerHTML = allPages[page] || allPages[1];
+  // Update pagination buttons
+  document.querySelectorAll('.page-btn').forEach(function(btn) {
+    btn.classList.remove('active');
+  });
+  // Highlight active page button
+  var pageBtns = document.querySelectorAll('.page-btn');
+  if (page === 1 && pageBtns[0]) pageBtns[0].classList.add('active');
+  if (page === 2 && pageBtns[1]) pageBtns[1].classList.add('active');
+  if (page === 3 && pageBtns[2]) pageBtns[2].classList.add('active');
+  // Update "Suivant" button
+  var suivantBtn = pageBtns[3];
+  if (suivantBtn) {
+    var nextPage = page < 3 ? page + 1 : 1;
+    suivantBtn.onclick = function() { goToPage(nextPage); };
+    suivantBtn.textContent = page < 3 ? 'Suivant →' : 'Début ↑';
+  }
+  // Scroll to top of grid
+  document.getElementById('articlesGrid').scrollIntoView({behavior: 'smooth', block: 'start'});
+}
+
+// Save page 1 content after DOM loads
+document.addEventListener('DOMContentLoaded', function() {
+  allPages[1] = document.getElementById('articlesGrid').innerHTML;
+});
+
 // Filter by search
 function filterArticles(q) {
   document.getElementById('blogSearch').value = q;
